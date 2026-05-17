@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free European VAT rate lookup for cross-border e-commerce sellers. Check standard and reduced VAT rates by country instantly.">
+  <meta name="keywords" content="VAT rates Europe, EU VAT, cross-border selling, e-commerce tax, reduced VAT">
+  <title>EU VAT Rate Lookup | European VAT Rates for Sellers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f9fc;
+      --surface: #ffffff;
+      --text: #1a1d26;
+      --text-muted: #5c6370;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-soft: #eff6ff;
+      --border: #e4e7ec;
+      --success: #059669;
+      --shadow: 0 4px 24px rgba(26, 29, 38, 0.06);
+      --shadow-lg: 0 12px 48px rgba(26, 29, 38, 0.1);
+      --radius: 12px;
+      --radius-lg: 20px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .page-bg {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(37, 99, 235, 0.08), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 0%, rgba(99, 102, 241, 0.05), transparent),
+        var(--bg);
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    header {
+      padding: 48px 0 32px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    .badge svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    h1 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .subtitle {
+      font-size: 1.0625rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* Main card */
+    main {
+      padding-bottom: 40px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .card-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .select-wrap {
+      position: relative;
+    }
+
+    .select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid var(--text-muted);
+      pointer-events: none;
+    }
+
+    select {
+      width: 100%;
+      appearance: none;
+      padding: 14px 44px 14px 18px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    select:hover {
+      border-color: #c5cad3;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    /* Results */
+    .results {
+      margin-top: 28px;
+      display: none;
+      animation: fadeIn 0.35s ease;
+    }
+
+    .results.visible {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .country-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .flag {
+      font-size: 2.25rem;
+      line-height: 1;
+    }
+
+    .country-name {
+      font-size: 1.375rem;
+      font-weight: 600;
+    }
+
+    .country-code {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .rates-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .rate-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      background: var(--bg);
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+    }
+
+    .rate-row.standard {
+      background: var(--accent-soft);
+      border-color: rgba(37, 99, 235, 0.15);
+    }
+
+    .rate-label {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+    }
+
+    .rate-row.standard .rate-label {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .rate-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+    }
+
+    .rate-row.standard .rate-value {
+      color: var(--accent);
+      font-size: 1.75rem;
+    }
+
+    .rate-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .placeholder {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-muted);
+    }
+
+    .placeholder svg {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+      opacity: 0.4;
+    }
+
+    .placeholder p {
+      font-size: 0.9375rem;
+    }
+
+    /* Info section */
+    .info-section {
+      padding: 8px 0 32px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .info-item {
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .info-item h3 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .info-item p {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Disclaimer */
+    .disclaimer {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 0 0 24px;
+      line-height: 1.5;
+    }
+
+    /* Ad slot */
+    .ad-section {
+      padding: 32px 0 48px;
+    }
+
+    .ad-slot {
+      min-height: 280px;
+      background: linear-gradient(135deg, #f1f3f7 0%, #e8ebf0 100%);
+      border: 2px dashed #c5cad3;
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+    }
+
+    .ad-slot-label {
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.6875rem;
+    }
+
+    .ad-slot-hint {
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 32px 0 24px;
+      }
+
+      .card {
+        padding: 24px 20px;
+      }
+
+      .rate-value {
+        font-size: 1.25rem;
+      }
+
+      .rate-row.standard .rate-value {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-bg" aria-hidden="true"></div>
+
+  <div class="container">
+    <header>
+      <div class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        For Cross-Border Sellers
+      </div>
+      <h1>European VAT Rate Lookup</h1>
+      <p class="subtitle">Instantly check standard and reduced VAT rates across Europe. Built for Amazon, eBay, Shopify &amp; marketplace sellers expanding into EU markets.</p>
+    </header>
+
+    <main>
+      <section class="card" aria-labelledby="country-label">
+        <label id="country-label" class="card-label" for="country-select">Select a country</label>
+        <div class="select-wrap">
+          <select id="country-select" aria-describedby="results-hint">
+            <option value="">�?Choose a European country �?/option>
+          </select>
+        </div>
+
+        <div id="placeholder" class="placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/>
+          </svg>
+          <p id="results-hint">Select a country above to view VAT rates</p>
+        </div>
+
+        <div id="results" class="results" role="region" aria-live="polite" aria-label="VAT rates">
+          <div class="country-header">
+            <span id="flag" class="flag" aria-hidden="true"></span>
+            <div>
+              <div id="country-name" class="country-name"></div>
+              <div id="country-code" class="country-code"></div>
+            </div>
+          </div>
+          <div id="rates-grid" class="rates-grid"></div>
+        </div>
+      </section>
+
+      <section class="info-section" aria-label="Seller tips">
+        <div class="info-grid">
+          <article class="info-item">
+            <h3>Standard Rate</h3>
+            <p>Applied to most goods and services. Used as the default rate for B2C sales in the destination country.</p>
+          </article>
+          <article class="info-item">
+            <h3>Reduced Rates</h3>
+            <p>Lower rates for essentials like food, books, medicine, and children's items. Varies by member state.</p>
+          </article>
+          <article class="info-item">
+            <h3>OSS &amp; IOSS</h3>
+            <p>EU sellers may use One-Stop Shop (OSS). Non-EU sellers often register for Import One-Stop Shop (IOSS) for parcels under �?50.</p>
+          </article>
+        </div>
+      </section>
+
+      <p class="disclaimer">Rates are for reference only. VAT rules change frequently �?always verify with your tax advisor or local tax authority before filing.</p>
+    </main>
+
+    <section class="ad-section" aria-label="Advertisement">
+      <div class="ad-slot" id="ad-slot">
+        <span class="ad-slot-label">Advertisement</span>
+        <span class="ad-slot-hint">Google AdSense / display ad placement (728×90 or 300×250 responsive)</span>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2025 EU VAT Rate Lookup. Information tool for e-commerce sellers.</p>
+    </footer>
+  </div>
+
+  <script>
+    const VAT_DATA = [
+      { code: 'AT', name: 'Austria', flag: '🇦🇹', standard: 20, reduced: [{ rate: 10, label: 'Reduced', desc: 'Food, books, accommodation' }, { rate: 13, label: 'Reduced II', desc: 'Cultural events, domestic flights' }] },
+      { code: 'BE', name: 'Belgium', flag: '🇧🇪', standard: 21, reduced: [{ rate: 6, label: 'Super-reduced', desc: 'Food, medicine, books' }, { rate: 12, label: 'Reduced', desc: 'Social housing, restaurants' }] },
+      { code: 'BG', name: 'Bulgaria', flag: '🇧🇬', standard: 20, reduced: [{ rate: 9, label: 'Reduced', desc: 'Hotels, books, baby products' }] },
+      { code: 'HR', name: 'Croatia', flag: '🇭🇷', standard: 25, reduced: [{ rate: 5, label: 'Super-reduced', desc: 'Bread, milk, medicine' }, { rate: 13, label: 'Reduced', desc: 'Hotels, newspapers' }] },
+      { code: 'CY', name: 'Cyprus', flag: '🇨🇾', standard: 19, reduced: [{ rate: 5, label: 'Super-reduced', desc: 'Food, medicine, books' }, { rate: 9, label: 'Reduced', desc: 'Hotels, restaurants' }] },
+      { code: 'CZ', name: 'Czech Republic', flag: '🇨🇿', standard: 21, reduced: [{ rate: 12, label: 'Reduced', desc: 'Food, medicine, books' }] },
+      { code: 'DK', name: 'Denmark', flag: '🇩🇰', standard: 25, reduced: [{ rate: 0, label: 'Zero / exempt', desc: 'Newspapers, public transport (no general reduced rate)' }] },
+      { code: 'EE', name: 'Estonia', flag: '🇪🇪', standard: 22, reduced: [{ rate: 9, label: 'Reduced', desc: 'Books, medicine, hotels' }] },
+      { code: 'FI', name: 'Finland', flag: '🇫🇮', standard: 24, reduced: [{ rate: 10, label: 'Reduced', desc: 'Food, books, medicine' }, { rate: 14, label: 'Reduced II', desc: 'Restaurants, transport' }] },
+      { code: 'FR', name: 'France', flag: '🇫🇷', standard: 20, reduced: [{ rate: 5.5, label: 'Super-reduced', desc: 'Food, books, medicine' }, { rate: 10, label: 'Reduced', desc: 'Restaurants, transport, renovation' }] },
+      { code: 'DE', name: 'Germany', flag: '🇩🇪', standard: 19, reduced: [{ rate: 7, label: 'Reduced', desc: 'Food, books, public transport' }] },
+      { code: 'GR', name: 'Greece', flag: '🇬🇷', standard: 24, reduced: [{ rate: 6, label: 'Super-reduced', desc: 'Medicine, books, theatres' }, { rate: 13, label: 'Reduced', desc: 'Food, hotels, energy' }] },
+      { code: 'HU', name: 'Hungary', flag: '🇭🇺', standard: 27, reduced: [{ rate: 5, label: 'Super-reduced', desc: 'Newspapers, medicine, books' }, { rate: 18, label: 'Reduced', desc: 'Food, restaurants' }] },
+      { code: 'IE', name: 'Ireland', flag: '🇮🇪', standard: 23, reduced: [{ rate: 9, label: 'Reduced', desc: 'Newspapers, sporting facilities' }, { rate: 13.5, label: 'Reduced II', desc: 'Fuel, electricity, restaurants' }] },
+      { code: 'IT', name: 'Italy', flag: '🇮🇹', standard: 22, reduced: [{ rate: 5, label: 'Super-reduced', desc: 'Basic food, social services' }, { rate: 10, label: 'Reduced', desc: 'Hotels, medicine, restaurants' }] },
+      { code: 'LV', name: 'Latvia', flag: '🇱🇻', standard: 21, reduced: [{ rate: 5, label: 'Super-reduced', desc: 'Medicine, medical devices' }, { rate: 12, label: 'Reduced', desc: 'Food, books, hotels' }] },
+      { code: 'LT', name: 'Lithuania', flag: '🇱🇹', standard: 21, reduced: [{ rate: 5, label: 'Super-reduced', desc: 'Medicine, books, newspapers' }, { rate: 9, label: 'Reduced', desc: 'Heating, public transport' }] },
+      { code: 'LU', name: 'Luxembourg', flag: '🇱🇺', standard: 17, reduced: [{ rate: 8, label: 'Super-reduced', desc: 'Cleaning, repairs, hairdressing' }, { rate: 14, label: 'Reduced', desc: 'Wine, fuel, advertising' }] },
+      { code: 'MT', name: 'Malta', flag: '🇲🇹', standard: 18, reduced: [{ rate: 5, label: 'Super-reduced', desc: 'Food, medicine, books' }, { rate: 7, label: 'Reduced', desc: 'Hotels, electricity' }] },
+      { code: 'NL', name: 'Netherlands', flag: '🇳🇱', standard: 21, reduced: [{ rate: 9, label: 'Reduced', desc: 'Food, books, medicine, hotels' }] },
+      { code: 'PL', name: 'Poland', flag: '🇵🇱', standard: 23, reduced: [{ rate: 5, label: 'Super-reduced', desc: 'Basic food, books' }, { rate: 8, label: 'Reduced', desc: 'Medicine, transport, hotels' }] },
+      { code: 'PT', name: 'Portugal', flag: '🇵🇹', standard: 23, reduced: [{ rate: 6, label: 'Super-reduced', desc: 'Basic food, books, medicine' }, { rate: 13, label: 'Reduced', desc: 'Restaurants, fuel, wine' }] },
+      { code: 'RO', name: 'Romania', flag: '🇷🇴', standard: 19, reduced: [{ rate: 5, label: 'Super-reduced', desc: 'Social housing, books' }, { rate: 9, label: 'Reduced', desc: 'Food, medicine, hotels' }] },
+      { code: 'SK', name: 'Slovakia', flag: '🇸🇰', standard: 20, reduced: [{ rate: 10, label: 'Reduced', desc: 'Food, medicine, books' }] },
+      { code: 'SI', name: 'Slovenia', flag: '🇸🇮', standard: 22, reduced: [{ rate: 5, label: 'Super-reduced', desc: 'Food, medicine, books' }, { rate: 9.5, label: 'Reduced', desc: 'Hotels, cultural events' }] },
+      { code: 'ES', name: 'Spain', flag: '🇪🇸', standard: 21, reduced: [{ rate: 4, label: 'Super-reduced', desc: 'Bread, milk, books, medicine' }, { rate: 10, label: 'Reduced', desc: 'Food, transport, hotels' }] },
+      { code: 'SE', name: 'Sweden', flag: '🇸🇪', standard: 25, reduced: [{ rate: 6, label: 'Super-reduced', desc: 'Books, newspapers, transport' }, { rate: 12, label: 'Reduced', desc: 'Food, hotels, cultural events' }] },
+      { code: 'GB', name: 'United Kingdom', flag: '🇬🇧', standard: 20, reduced: [{ rate: 5, label: 'Reduced', desc: 'Children\'s car seats, home energy' }, { rate: 0, label: 'Zero-rated', desc: 'Most food, books, children\'s clothes' }], note: 'Post-Brexit �?not in EU VAT area' },
+      { code: 'NO', name: 'Norway', flag: '🇳🇴', standard: 25, reduced: [{ rate: 15, label: 'Reduced', desc: 'Food' }, { rate: 12, label: 'Reduced II', desc: 'Transport, hotels, cinema' }], note: 'EEA �?not EU member' },
+      { code: 'CH', name: 'Switzerland', flag: '🇨🇭', standard: 8.1, reduced: [{ rate: 2.6, label: 'Reduced', desc: 'Food, medicine, books' }, { rate: 3.8, label: 'Special', desc: 'Accommodation' }], note: 'Not EU �?Swiss VAT' },
+      { code: 'IS', name: 'Iceland', flag: '🇮🇸', standard: 24, reduced: [{ rate: 11, label: 'Reduced', desc: 'Food, books, hotels' }], note: 'EEA �?not EU member' },
+      { code: 'LI', name: 'Liechtenstein', flag: '🇱🇮', standard: 8.1, reduced: [{ rate: 2.6, label: 'Reduced', desc: 'Aligned with Switzerland' }], note: 'Swiss customs union' },
+      { code: 'MC', name: 'Monaco', flag: '🇲🇨', standard: 20, reduced: [{ rate: 5.5, label: 'Super-reduced', desc: 'Aligned with France' }, { rate: 10, label: 'Reduced', desc: 'Aligned with France' }], note: 'Uses French VAT system' },
+      { code: 'AD', name: 'Andorra', flag: '🇦🇩', standard: 4.5, reduced: [{ rate: 1, label: 'Reduced', desc: 'Education, healthcare' }, { rate: 2.5, label: 'Reduced II', desc: 'Tourism, culture' }], note: 'IGI �?not EU' },
+      { code: 'SM', name: 'San Marino', flag: '🇸🇲', standard: 17, reduced: [{ rate: 5, label: 'Reduced', desc: 'Aligned with Italy' }], note: 'Custom agreement with Italy' },
+      { code: 'TR', name: 'Turkey', flag: '🇹🇷', standard: 20, reduced: [{ rate: 1, label: 'Super-reduced', desc: 'Basic food' }, { rate: 10, label: 'Reduced', desc: 'Textiles, medicine' }], note: 'KDV �?EU candidate, not member' },
+      { code: 'UA', name: 'Ukraine', flag: '🇺🇦', standard: 20, reduced: [{ rate: 7, label: 'Reduced', desc: 'Medicine, medical devices' }, { rate: 14, label: 'Reduced II', desc: 'Food products' }], note: 'Not EU' },
+      { code: 'RS', name: 'Serbia', flag: '🇷🇸', standard: 20, reduced: [{ rate: 10, label: 'Reduced', desc: 'Food, medicine, books' }], note: 'Not EU' },
+      { code: 'AL', name: 'Albania', flag: '🇦🇱', standard: 20, reduced: [{ rate: 6, label: 'Reduced', desc: 'Hotels, books' }, { rate: 10, label: 'Reduced II', desc: 'Medicine, food' }], note: 'Not EU' },
+      { code: 'BA', name: 'Bosnia and Herzegovina', flag: '🇧🇦', standard: 17, reduced: [{ rate: 5, label: 'Reduced', desc: 'Medicine, books' }], note: 'Not EU' },
+      { code: 'MK', name: 'North Macedonia', flag: '🇲🇰', standard: 18, reduced: [{ rate: 5, label: 'Reduced', desc: 'Basic food, medicine' }, { rate: 10, label: 'Reduced II', desc: 'Hotels, restaurants' }], note: 'EU candidate' },
+      { code: 'ME', name: 'Montenegro', flag: '🇲🇪', standard: 21, reduced: [{ rate: 7, label: 'Reduced', desc: 'Food, medicine, books' }], note: 'Not EU' },
+      { code: 'MD', name: 'Moldova', flag: '🇲🇩', standard: 20, reduced: [{ rate: 8, label: 'Reduced', desc: 'Bread, milk, medicine' }, { rate: 12, label: 'Reduced II', desc: 'Hotels, restaurants' }], note: 'Not EU' },
+      { code: 'BY', name: 'Belarus', flag: '🇧🇾', standard: 20, reduced: [{ rate: 10, label: 'Reduced', desc: 'Food, medicine, children\'s goods' }], note: 'Not EU' },
+    ];
+
+    const select = document.getElementById('country-select');
+    const results = document.getElementById('results');
+    const placeholder = document.getElementById('placeholder');
+    const flagEl = document.getElementById('flag');
+    const nameEl = document.getElementById('country-name');
+    const codeEl = document.getElementById('country-code');
+    const gridEl = document.getElementById('rates-grid');
+
+    VAT_DATA.sort((a, b) => a.name.localeCompare(b.name)).forEach(country => {
+      const opt = document.createElement('option');
+      opt.value = country.code;
+      opt.textContent = `${country.flag} ${country.name}`;
+      select.appendChild(opt);
+    });
+
+    function formatRate(rate) {
+      return Number.isInteger(rate) ? `${rate}%` : `${rate}%`;
+    }
+
+    function renderRates(country) {
+      flagEl.textContent = country.flag;
+      nameEl.textContent = country.name;
+      codeEl.textContent = country.note
+        ? `${country.code} · ${country.note}`
+        : `Country code: ${country.code}`;
+
+      gridEl.innerHTML = '';
+
+      const standardRow = document.createElement('div');
+      standardRow.className = 'rate-row standard';
+      standardRow.innerHTML = `
+        <div>
+          <div class="rate-label">Standard VAT Rate</div>
+          <div class="rate-desc">Default rate for most goods &amp; services</div>
+        </div>
+        <div class="rate-value">${formatRate(country.standard)}</div>
+      `;
+      gridEl.appendChild(standardRow);
+
+      country.reduced.forEach(r => {
+        const row = document.createElement('div');
+        row.className = 'rate-row';
+        row.innerHTML = `
+          <div>
+            <div class="rate-label">${r.label} (${formatRate(r.rate)})</div>
+            <div class="rate-desc">${r.desc}</div>
+          </div>
+          <div class="rate-value">${formatRate(r.rate)}</div>
+        `;
+        gridEl.appendChild(row);
+      });
+    }
+
+    select.addEventListener('change', () => {
+      const code = select.value;
+      if (!code) {
+        results.classList.remove('visible');
+        placeholder.style.display = 'block';
+        return;
+      }
+
+      const country = VAT_DATA.find(c => c.code === code);
+      if (country) {
+        renderRates(country);
+        placeholder.style.display = 'none';
+        results.classList.add('visible');
+      }
+    });
+  </script>
+</body>
+</html>
