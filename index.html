@@ -8,20 +8,24 @@
   <title>EU VAT Rates &amp; Seller Guide | European VAT Lookup</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f8f9fc;
+      --bg: #ffffff;
       --surface: #ffffff;
-      --text: #1a1d26;
-      --text-muted: #5c6370;
+      --text: #333333;
+      --heading: #1a2e4a;
+      --text-muted: #64748b;
       --accent: #2563eb;
       --accent-hover: #1d4ed8;
       --accent-soft: #eff6ff;
-      --border: #e4e7ec;
+      --border: #e2e8f0;
+      --border-control: #cbd5e1;
+      --table-header-bg: #f8f9fa;
+      --panel-muted: #f8f9fa;
       --success: #059669;
-      --shadow: 0 4px 24px rgba(26, 29, 38, 0.06);
-      --shadow-lg: 0 12px 48px rgba(26, 29, 38, 0.1);
+      --shadow: 0 1px 3px rgba(26, 46, 74, 0.06);
+      --shadow-lg: 0 4px 24px rgba(26, 46, 74, 0.08);
       --radius: 12px;
       --radius-lg: 20px;
     }
@@ -37,7 +41,7 @@
     }
 
     body {
-      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+      font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
@@ -47,10 +51,7 @@
     .page-bg {
       position: fixed;
       inset: 0;
-      background:
-        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(37, 99, 235, 0.08), transparent),
-        radial-gradient(ellipse 60% 40% at 100% 0%, rgba(99, 102, 241, 0.05), transparent),
-        var(--bg);
+      background: var(--bg);
       z-index: -1;
     }
 
@@ -65,7 +66,7 @@
       color: var(--text-muted);
       margin-top: 12px;
       padding: 12px 14px;
-      background: var(--bg);
+      background: var(--panel-muted);
       border-radius: var(--radius);
       border: 1px solid var(--border);
     }
@@ -79,18 +80,44 @@
     }
 
     .content-section h2 {
-      font-family: 'Instrument Serif', Georgia, serif;
-      font-size: 1.5rem;
-      font-weight: 400;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 1.375rem;
+      font-weight: 700;
+      color: var(--heading);
       margin-bottom: 12px;
       letter-spacing: -0.02em;
     }
 
-    .content-section > p,
+    .policy-alert {
+      font-weight: 700;
+      color: #dc2626;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      margin: 0 0 20px;
+      padding: 14px 16px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: var(--radius);
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    .content-section > p:not(.policy-alert),
     .content-section .lead {
       font-size: 0.9375rem;
-      color: var(--text-muted);
+      color: var(--text);
       margin-bottom: 14px;
+    }
+
+    .content-section > p:not(.lead):not(.policy-alert) {
+      color: var(--text-muted);
     }
 
     .content-section ul {
@@ -126,14 +153,18 @@
     }
 
     .data-table th {
-      background: var(--bg);
+      background: var(--table-header-bg);
       font-weight: 600;
-      color: var(--text);
+      color: var(--heading);
       white-space: nowrap;
     }
 
     .data-table tr:last-child td {
       border-bottom: none;
+    }
+
+    .data-table td {
+      color: var(--text);
     }
 
     .data-table td.num {
@@ -142,12 +173,13 @@
     }
 
     .calc-box {
-      background: var(--bg);
+      background: var(--panel-muted);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 18px 20px;
       font-size: 0.9375rem;
       margin-bottom: 12px;
+      color: var(--text);
     }
 
     .calc-box code {
@@ -171,6 +203,7 @@
       cursor: pointer;
       font-weight: 600;
       font-size: 0.9375rem;
+      color: var(--heading);
       padding: 14px 0;
       list-style-position: outside;
     }
@@ -199,7 +232,7 @@
     }
 
     .legal-disclaimer strong {
-      color: var(--text);
+      color: var(--heading);
       font-size: 0.8125rem;
     }
 
@@ -229,9 +262,10 @@
     }
 
     h1 {
-      font-family: 'Instrument Serif', Georgia, serif;
-      font-size: clamp(2rem, 5vw, 2.75rem);
-      font-weight: 400;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: clamp(1.75rem, 4vw, 2.25rem);
+      font-weight: 700;
+      color: var(--heading);
       line-height: 1.2;
       letter-spacing: -0.02em;
       margin-bottom: 16px;
@@ -262,7 +296,7 @@
       display: block;
       font-size: 0.875rem;
       font-weight: 600;
-      color: var(--text);
+      color: var(--heading);
       margin-bottom: 10px;
     }
 
@@ -292,15 +326,15 @@
       font-size: 1rem;
       font-weight: 500;
       color: var(--text);
-      background: var(--bg);
-      border: 1px solid var(--border);
+      background: var(--surface);
+      border: 1px solid var(--border-control);
       border-radius: var(--radius);
       cursor: pointer;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     select:hover {
-      border-color: #c5cad3;
+      border-color: #94a3b8;
     }
 
     select:focus {
@@ -311,7 +345,7 @@
 
     /* Results */
     .results {
-      margin-top: 28px;
+      margin-top: 20px;
       display: none;
       animation: fadeIn 0.35s ease;
     }
@@ -342,6 +376,7 @@
     .country-name {
       font-size: 1.375rem;
       font-weight: 600;
+      color: var(--heading);
     }
 
     .country-code {
@@ -360,9 +395,9 @@
       align-items: center;
       justify-content: space-between;
       padding: 16px 18px;
-      background: var(--bg);
+      background: var(--panel-muted);
       border-radius: var(--radius);
-      border: 1px solid transparent;
+      border: 1px solid var(--border);
     }
 
     .rate-row.standard {
@@ -437,6 +472,7 @@
       font-size: 0.875rem;
       font-weight: 600;
       margin-bottom: 6px;
+      color: var(--heading);
     }
 
     .info-item p {
@@ -454,16 +490,17 @@
       line-height: 1.5;
     }
 
-    /* Ad slot */
+    /* Ad slot (embedded in lookup card: between country select and results) */
     .ad-section {
-      padding: 32px 0 48px;
+      padding: 20px 0 4px;
+      margin: 0;
     }
 
     .ad-slot {
-      min-height: 280px;
-      background: linear-gradient(135deg, #f1f3f7 0%, #e8ebf0 100%);
-      border: 2px dashed #c5cad3;
-      border-radius: var(--radius-lg);
+      min-height: 220px;
+      background: var(--panel-muted);
+      border: 2px dashed var(--border-control);
+      border-radius: var(--radius);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -538,6 +575,13 @@
           </select>
         </div>
 
+        <section class="ad-section" aria-label="Advertisement">
+          <div class="ad-slot" id="ad-slot">
+            <span class="ad-slot-label">Advertisement</span>
+            <span class="ad-slot-hint">Google AdSense / display ad placement (728x90 or 300x250 responsive)</span>
+          </div>
+        </section>
+
         <div id="placeholder" class="placeholder">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/>
@@ -575,6 +619,7 @@
       </section>
 
       <section class="card content-section" id="what-is-vat" aria-labelledby="what-vat-h">
+        <p class="policy-alert" role="alert"><strong>[2026 New Policy Alert]</strong> EU VAT rules have been updated for 2026. Please verify current rates before filing.</p>
         <h2 id="what-vat-h">What is VAT?</h2>
         <p class="lead"><strong>Value Added Tax (VAT)</strong> is a consumption tax collected at each stage of the supply chain. Businesses registered for VAT charge VAT on sales (output VAT), reclaim VAT on business purchases (input VAT), and pay the net difference to the tax authority.</p>
         <p>For e-commerce, the practical question is usually: <em>which country's VAT applies, who must register, and which rate band applies to this SKU?</em> The EU sets framework rules; each country sets rates and most compliance details.</p>
@@ -754,13 +799,6 @@
       <strong>Disclaimer</strong>
       <p style="margin:10px 0 0">This page is an educational summary for e-commerce sellers. It does not constitute legal, tax, or accounting advice. VAT rates, thresholds, filing calendars, and scheme eligibility change frequently and depend on your facts (legal entity, incoterms, stock location, product category, customer type, and marketplace role). Always confirm with a qualified advisor and the relevant tax authority before you register, charge VAT, or file returns. We disclaim liability for any loss arising from reliance on this tool.</p>
     </div>
-
-    <section class="ad-section" aria-label="Advertisement">
-      <div class="ad-slot" id="ad-slot">
-        <span class="ad-slot-label">Advertisement</span>
-        <span class="ad-slot-hint">Google AdSense / display ad placement (728x90 or 300x250 responsive)</span>
-      </div>
-    </section>
 
     <footer>
       <p>&copy; 2026 EU VAT Rate Lookup. Information tool for e-commerce sellers.</p>
