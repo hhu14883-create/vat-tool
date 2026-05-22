@@ -482,16 +482,7 @@
       line-height: 1.5;
     }
 
-    /* Disclaimer */
-    .disclaimer {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      text-align: center;
-      padding: 0 0 24px;
-      line-height: 1.5;
-    }
-
-    /* Ad slot (embedded in lookup card: between country select and results) */
+    /* Ad slot */
     .ad-section {
       padding: 20px 0 4px;
       margin: 0;
@@ -521,15 +512,6 @@
     .ad-slot-hint {
       font-size: 0.75rem;
       opacity: 0.8;
-    }
-
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 24px;
-      font-size: 0.8125rem;
-      color: var(--text-muted);
-      border-top: 1px solid var(--border);
     }
 
     @media (max-width: 600px) {
@@ -619,6 +601,52 @@
         </div>
       </section>
 
+      <section class="card content-section" style="border: 2px solid var(--accent); margin-top: 40px;">
+        <h2 style="color: var(--accent); margin-bottom: 8px;">⚡ 跨境业务场景动态诊断与清关测算 (2026最新版)</h2>
+        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 20px;">无需阅读长篇大论的政策！直接输入金额或勾选场景，实时获取合规方案。</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+          <div style="background: var(--panel-muted); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border);">
+            <h3 style="font-size: 1rem; color: var(--heading); margin-bottom: 12px;">📋 欧盟/英国本土合规诊断</h3>
+            <p style="font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 12px;">请根据店铺真实情况勾选：</p>
+            
+            <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.875rem; margin-bottom: 10px; cursor: pointer;">
+              <input type="checkbox" id="chk-shopify" style="margin-top: 4px;"> 
+              <span>我使用的是 Shopify / Etsy 等自建独立站（非平台代扣代缴）</span>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.875rem; margin-bottom: 10px; cursor: pointer;">
+              <input type="checkbox" id="chk-warehouse" style="margin-top: 4px;"> 
+              <span>我在欧洲/英国本地使用了海外仓（如亚马逊FBA或海外仓）发货</span>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.875rem; margin-bottom: 16px; cursor: pointer;">
+              <input type="checkbox" id="chk-over10k" style="margin-top: 4px;"> 
+              <span>我在欧盟全境的年远程销售额已经超过了 10,000 欧元</span>
+            </label>
+
+            <button onclick="diagnoseCompliance()" style="width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: var(--radius); font-weight: 600; cursor: pointer;">🔥 一键生成合规报告</button>
+            <div id="diag-result" style="margin-top: 16px; display: none; padding: 12px; border-radius: 8px; font-size: 0.875rem;"></div>
+          </div>
+
+          <div style="background: var(--panel-muted); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border);">
+            <h3 style="font-size: 1rem; color: var(--heading); margin-bottom: 12px;">📦 150欧/135镑小包清关测算</h3>
+            <p style="font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 12px;">针对从中国直发的跨境直邮小包：</p>
+            
+            <div style="margin-bottom: 12px;">
+              <label style="display: block; font-size: 0.8125rem; font-weight: 600; margin-bottom: 4px;">输入单笔订单声明价值:</label>
+              <input type="number" id="order-amount" value="120" style="width: 100%; padding: 10px; border: 1px solid var(--border-control); border-radius: 6px; font-size: 0.9375rem;">
+            </div>
+
+            <div style="margin-bottom: 16px; display: flex; gap: 16px;">
+              <label style="font-size: 0.875rem; cursor: pointer;"><input type="radio" name="currency" value="EUR" checked> EUR (欧元包裹)</label>
+              <label style="font-size: 0.875rem; cursor: pointer;"><input type="radio" name="currency" value="GBP"> GBP (英镑包裹)</label>
+            </div>
+
+            <button onclick="calculateCustoms()" style="width: 100%; padding: 12px; background: #059669; color: white; border: none; border-radius: var(--radius); font-weight: 600; cursor: pointer;">🚢 测算海关清关路径</button>
+            <div id="calc-result" style="margin-top: 16px; display: none; padding: 12px; border-radius: 8px; font-size: 0.875rem;"></div>
+          </div>
+        </div>
+      </section>
+
       <section class="card content-section" id="what-is-vat" aria-labelledby="what-vat-h">
         <p class="policy-alert" role="alert"><strong>[2026 New Policy Alert]</strong> EU VAT rules have been updated for 2026. Please verify current rates before filing.</p>
         <h2 id="what-vat-h">What is VAT?</h2>
@@ -645,7 +673,7 @@
 
       <section class="card content-section" id="thresholds" aria-labelledby="thr-h">
         <h2 id="thr-h">Registration &amp; distance-selling thresholds (seller view)</h2>
-        <p class="lead">Two different ideas are often mixed: <strong>where VAT is due</strong> vs <strong>whether you need a local VAT number</strong>. Below is a practical EU e-commerce framing; domestic small-business exemptions are separate national regimes.</p>
+        <p class="lead">Two different ideas are often mixed: <strong>where VAT is due</strong> vs <strong>whether you need a local VAT number</strong>.</p>
         <div class="table-wrap">
           <table class="data-table" aria-label="EU cross-border thresholds">
             <thead>
@@ -659,94 +687,23 @@
               <tr>
                 <td>EU B2C distance sales (EU-established seller)</td>
                 <td>Combined EU/NI B2C turnover under <strong>EUR 10,000</strong> per calendar year</td>
-                <td>You may charge your home-country VAT on eligible distance sales until you exceed the threshold; above it, destination-country VAT generally applies (OSS is the usual reporting route).</td>
+                <td>You may charge your home-country VAT on eligible distance sales until you exceed the threshold; above it, destination-country VAT generally applies.</td>
               </tr>
               <tr>
                 <td>Stock in another EU country</td>
                 <td>Usually immediate VAT registration in that country</td>
-                <td>From 1 Jan 2025, EU rules tightened: the EUR 10,000 micro-threshold does not replace VAT obligations for goods already located in another member state. Confirm with your advisor.</td>
+                <td>From 1 Jan 2025, EU rules tightened: the EUR 10,000 micro-threshold does not replace VAT obligations for goods already located in another member state.</td>
               </tr>
               <tr>
                 <td>IOSS (imports)</td>
                 <td>Consignments up to <strong>EUR 150</strong></td>
-                <td>Optional scheme to declare and pay import VAT via a single IOSS registration; customs treatment must match the shipment model.</td>
+                <td>Optional scheme to declare and pay import VAT via a single IOSS registration.</td>
               </tr>
               <tr>
                 <td>Marketplace deemed supplier</td>
                 <td>Platform may collect VAT on certain B2C sales</td>
-                <td>You still need correct product tax codes and may have residual obligations (records, B2B, own website sales).</td>
+                <td>You still need correct product tax codes and may have residual obligations.</td>
               </tr>
-            </tbody>
-          </table>
-        </div>
-        <h2 style="font-size:1.15rem;margin:20px 0 10px">Domestic VAT registration turnover (approximate)</h2>
-        <p class="lead">National <strong>mandatory registration thresholds</strong> (when you must get a VAT number for domestic activity only) differ widely and change often. Figures below are <strong>order-of-magnitude</strong> for orientation; use your accountant and the national tax authority.</p>
-        <div class="table-wrap">
-          <table class="data-table" aria-label="Approximate domestic VAT registration thresholds">
-            <thead>
-              <tr>
-                <th>Country</th>
-                <th>Typical domestic registration threshold</th>
-                <th>Comment</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Germany</td><td>Generally first taxable supply triggers liability; small-business exemption exists around <strong>EUR 22,000</strong> prior-year turnover (special rules)</td><td>Kleinunternehmer rules are not a substitute for cross-border obligations.</td></tr>
-              <tr><td>France</td><td>Often <strong>goods sales EUR 34,400</strong> / <strong>services EUR 36,500</strong> (franchise base, subject to conditions)</td><td>Franchise en base; verify activity type.</td></tr>
-              <tr><td>Italy</td><td>Common retail/commercial exemption ceiling about <strong>EUR 85,000</strong> (sector-dependent)</td><td>Forfettario and other regimes differ; cross-border sales often excluded from simplifications.</td></tr>
-              <tr><td>Spain</td><td>Domestic exemption for small traders historically around <strong>EUR 85,000</strong> under simplified schemes for certain residents</td><td>Not available to all business types; not a blanket EU OSS substitute.</td></tr>
-              <tr><td>Netherlands</td><td>Small businesses scheme roughly under <strong>EUR 20,000</strong> (KOR) with strict conditions</td><td>Separate from IOSS/OSS foreign turnover.</td></tr>
-              <tr><td>United Kingdom</td><td>Taxable turnover over <strong>GBP 90,000</strong> (frozen threshold; confirm current year)</td><td>Post-Brexit: no EU VAT, separate UK VAT.</td></tr>
-              <tr><td>Poland</td><td>Exemption possible below <strong>PLN 200,000</strong> annual turnover for qualifying small taxpayers</td><td>Many exclusions (e.g. certain goods, intra-EU acquisitions).</td></tr>
-              <tr><td>Other EU</td><td>Varies</td><td>Use the European Commission TEDB country sheets and local guidance.</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="card content-section" id="filing" aria-labelledby="filing-h">
-        <h2 id="filing-h">VAT return frequency (simplified)</h2>
-        <p class="lead"><strong>Union OSS / IOSS</strong> returns are generally <strong>quarterly</strong> in most member states' implementations. <strong>Domestic</strong> VAT returns are often monthly for larger businesses and quarterly (or annual for very small domestic cases) depending on country rules and turnover.</p>
-        <div class="table-wrap">
-          <table class="data-table" aria-label="Typical domestic VAT filing cadence EU">
-            <thead>
-              <tr>
-                <th>Country</th>
-                <th>Typical domestic filing cadence</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Austria</td><td>Monthly (quarterly if small taxpayer approved)</td><td>Annual VAT return.</td></tr>
-              <tr><td>Belgium</td><td>Monthly or quarterly</td><td>Depends on turnover; client lists may apply.</td></tr>
-              <tr><td>Bulgaria</td><td>Monthly</td><td>Smaller businesses may qualify for quarterly in some cases.</td></tr>
-              <tr><td>Croatia</td><td>Monthly</td><td>Annual summary.</td></tr>
-              <tr><td>Cyprus</td><td>Quarterly (many SMEs) or monthly</td><td>Based on taxable turnover bands.</td></tr>
-              <tr><td>Czech Republic</td><td>Monthly</td><td>Quarterly only for very small taxable persons if accepted.</td></tr>
-              <tr><td>Denmark</td><td>Quarterly (most) / semi-annual (very small)</td><td>Large payers can be monthly.</td></tr>
-              <tr><td>Estonia</td><td>Monthly</td><td>Annual return.</td></tr>
-              <tr><td>Finland</td><td>Monthly</td><td>Periodic filing calendar set by tax office.</td></tr>
-              <tr><td>France</td><td>Monthly (CA3)</td><td>Quarterly CA12 for eligible small businesses.</td></tr>
-              <tr><td>Germany</td><td>Monthly default; quarterly if eligible</td><td>Annual USt return.</td></tr>
-              <tr><td>Greece</td><td>Monthly</td><td>Digital bookkeeping obligations for many.</td></tr>
-              <tr><td>Hungary</td><td>Monthly</td><td>Real-time invoice reporting (RTIR) alongside returns.</td></tr>
-              <tr><td>Ireland</td><td>Bi-monthly (common) or monthly / annual (small)</td><td>ROS filing; cadence depends on liability level.</td></tr>
-              <tr><td>Italy</td><td>Monthly or quarterly (Liquidazioni)</td><td>Annual Modello IVA.</td></tr>
-              <tr><td>Latvia</td><td>Monthly</td><td>Standard for VAT payers.</td></tr>
-              <tr><td>Lithuania</td><td>Monthly</td><td>Quarterly for small in defined cases.</td></tr>
-              <tr><td>Luxembourg</td><td>Monthly or quarterly</td><td>Annual return.</td></tr>
-              <tr><td>Malta</td><td>Quarterly (many) or monthly</td><td>Turnover-based.</td></tr>
-              <tr><td>Netherlands</td><td>Quarterly (common) or monthly</td><td>Large businesses usually monthly.</td></tr>
-              <tr><td>Poland</td><td>Monthly or quarterly</td><td>JPK_VAT / SAF-T obligations.</td></tr>
-              <tr><td>Portugal</td><td>Monthly or quarterly</td><td>Modelo 303 periodicity depends on turnover.</td></tr>
-              <tr><td>Romania</td><td>Monthly (most)</td><td>Quarterly for very small in specific cases.</td></tr>
-              <tr><td>Slovakia</td><td>Monthly</td><td>Quarterly for small payers if conditions met.</td></tr>
-              <tr><td>Slovenia</td><td>Monthly</td><td>Annual reconciliation.</td></tr>
-              <tr><td>Spain</td><td>Monthly or quarterly (Modelo 303)</td><td>Annual Modelo 390.</td></tr>
-              <tr><td>Sweden</td><td>Quarterly (common) or monthly</td><td>Turnover-based reporting period.</td></tr>
-              <tr><td>United Kingdom</td><td>Quarterly (default)</td><td>Annual accounting scheme optional.</td></tr>
-              <tr><td>Norway</td><td>Bi-monthly (common)</td><td>Not EU; no OSS.</td></tr>
-              <tr><td>Switzerland</td><td>Quarterly (most SMEs)</td><td>Not EU; cantonal quirks rare for VAT period.</td></tr>
             </tbody>
           </table>
         </div>
@@ -756,177 +713,168 @@
         <h2 id="faq-h">Seller FAQ</h2>
         <details>
           <summary>What is the difference between OSS and IOSS?</summary>
-          <p><strong>Union OSS</strong> lets you report and pay VAT on eligible B2C sales of goods and services to consumers across the EU from one registration. <strong>IOSS</strong> is only for import VAT on low-value consignments (not exceeding EUR 150) when sold B2C from outside the EU and declared under the scheme.</p>
+          <p><strong>Union OSS</strong> lets you report and pay VAT on eligible B2C sales of goods and services to consumers across the EU from one registration. <strong>IOSS</strong> is only for import VAT on low-value consignments (not exceeding EUR 150) when sold B2C from outside the EU.</p>
         </details>
         <details>
           <summary>Which VAT rate do I show at checkout?</summary>
-          <p>For B2C where your supply is taxed in the buyer's country, use that country's rate for the <strong>product category</strong> (standard vs reduced). Your tax engine or marketplace should map HS/tax category to a rate; a single "country default" is wrong for grocery vs electronics.</p>
+          <p>For B2C where your supply is taxed in the buyer's country, use that country's rate for the <strong>product category</strong> (standard vs reduced).</p>
         </details>
         <details>
           <summary>Does Amazon (or another marketplace) pay my VAT for me?</summary>
-          <p>Often partially. Under <strong>marketplace facilitator / deemed supplier</strong> rules, the platform may collect VAT on certain domestic and cross-border B2C sales. You remain responsible for correct product data, B2B invoices, sales outside the marketplace, and any registrations still required.</p>
-        </details>
-        <details>
-          <summary>Do I need a VAT number in every EU country?</summary>
-          <p>Not necessarily. If you only ship from one EU country and qualify for OSS, a <strong>single Union OSS</strong> registration may cover B2C distance sales. If you hold <strong>stock in multiple countries</strong>, you typically need VAT registration (or a fiscal structure) in each storage country. Non-EU sellers have different entry points (IOSS, import VAT, importer of record).</p>
-        </details>
-        <details>
-          <summary>What changed with the EUR 10,000 distance-selling threshold?</summary>
-          <p>EU-established sellers can still use a <strong>combined EUR 10,000</strong> annual test for eligible distance sales, but <strong>goods already located in another member state</strong> are treated separately under tightened rules effective <strong>1 January 2025</strong>. Treat "threshold" marketing content from before 2025 as outdated.</p>
-        </details>
-        <details>
-          <summary>How do B2B sales work inside the EU?</summary>
-          <p>Intra-EU B2B goods often use <strong>zero-rating / reverse charge</strong> if you validate the customer's VAT ID (VIES) and meet transport rules. Services have different place-of-supply rules. You still issue compliant invoices and keep evidence.</p>
-        </details>
-        <details>
-          <summary>Are digital products (ebooks, SaaS) taxed like physical goods?</summary>
-          <p>No. <strong>Telecommunications, broadcasting, and electronic (TBE) services</strong> to EU consumers generally follow B2C place-of-supply rules that predate the 2021 e-commerce goods package. OSS can cover TBE, but rate and evidence rules still follow the consumer's country.</p>
-        </details>
-        <details>
-          <summary>Can I reclaim import VAT on inventory I ship to an EU warehouse?</summary>
-          <p>If you become VAT-registered in that country and import as a taxable person, you may recover import VAT subject to <strong>local deduction rules</strong> and evidence (customs documents, C79-equivalent). IOSS VAT is generally not the same mechanism as bulk inventory imports.</p>
-        </details>
-        <details>
-          <summary>Do UK VAT rules still interact with the EU?</summary>
-          <p>The UK is outside the EU VAT area. Sales to/from the EU are <strong>exports/imports</strong> with customs and UK VAT rules on the UK side, and EU rules on the EU side. Northern Ireland has special rules for goods under the Windsor Framework.</p>
+          <p>Under <strong>marketplace facilitator / deemed supplier</strong> rules, the platform may collect VAT on certain B2C sales. You remain responsible for correct data.</p>
         </details>
       </section>
 
-      <p class="source-note">Rate figures in the lookup are maintained against the <a href="https://taxation-customs.ec.europa.eu/taxation/value-added-tax-vat_en" rel="noopener noreferrer" target="_blank">European Commission VAT overview</a> and national schedules (e.g. reduced bands). Official master reference: <a href="https://ec.europa.eu/taxation_customs/tedb/taxSearch.html" rel="noopener noreferrer" target="_blank">Taxes in Europe Database (TEDB)</a>. Verify before pricing or filing.</p>
-
+      <p class="source-note">Rate figures in the lookup are maintained against the <a href="https://taxation-customs.ec.europa.eu/taxation/value-added-tax-vat_en" rel="noopener noreferrer" target="_blank">European Commission VAT overview</a>. Verify before pricing or filing.</p>
     </main>
 
     <div class="legal-disclaimer" role="note">
       <strong>Disclaimer</strong>
-      <p style="margin:10px 0 0">This page is an educational summary for e-commerce sellers. It does not constitute legal, tax, or accounting advice. VAT rates, thresholds, filing calendars, and scheme eligibility change frequently and depend on your facts (legal entity, incoterms, stock location, product category, customer type, and marketplace role). Always confirm with a qualified advisor and the relevant tax authority before you register, charge VAT, or file returns. We disclaim liability for any loss arising from reliance on this tool.</p>
+      <p style="margin:10px 0 0">This page is an educational summary for e-commerce sellers. It does not constitute legal, tax, or accounting advice. We disclaim liability for any loss arising from reliance on this tool.</p>
     </div>
 
-    <footer>
+    <footer style="text-align: center; padding: 24px; font-size: 0.8125rem; color: var(--text-muted); border-top: 1px solid var(--border);">
       <p>&copy; 2026 EU VAT Rate Lookup. Information tool for e-commerce sellers.</p>
     </footer>
   </div>
 
   <script>
+    // 补全后的全欧洲核心税率数据库
     const VAT_DATA = [
       { code: 'AT', name: 'Austria', flag: '🇦🇹', standard: 20, reduced: [{ rate: 13, label: 'Reduced', desc: 'Hotels, wine, cultural services' }, { rate: 10, label: 'Reduced II', desc: 'Food, books, newspapers' }] },
-      { code: 'BE', name: 'Belgium', flag: '🇧🇪', standard: 21, reduced: [{ rate: 12, label: 'Reduced', desc: 'Restaurants, energy renovation' }, { rate: 6, label: 'Reduced II', desc: 'Food, medicine, books' }, { rate: 0, label: 'Zero', desc: 'Certain newspapers (narrow list)' }] },
-      { code: 'BG', name: 'Bulgaria', flag: '🇧🇬', standard: 20, reduced: [{ rate: 9, label: 'Reduced', desc: 'Hotels, books, baby products' }] },
-      { code: 'HR', name: 'Croatia', flag: '🇭🇷', standard: 25, reduced: [{ rate: 13, label: 'Reduced', desc: 'Catering, tourism' }, { rate: 5, label: 'Super-reduced', desc: 'Bread, milk, books, medicine' }] },
-      { code: 'CY', name: 'Cyprus', flag: '🇨🇾', standard: 19, reduced: [{ rate: 9, label: 'Reduced', desc: 'Hotels, restaurants' }, { rate: 5, label: 'Reduced II', desc: 'Food, pharmaceuticals' }, { rate: 3, label: 'Super-reduced', desc: 'Books, press, art (narrow list)' }] },
-      { code: 'CZ', name: 'Czech Republic', flag: '🇨🇿', standard: 21, reduced: [{ rate: 12, label: 'Reduced', desc: 'Food, medicine, books, childcare' }] },
-      { code: 'DK', name: 'Denmark', flag: '🇩🇰', standard: 25, reduced: [{ rate: 0, label: 'Zero / exempt', desc: 'No statutory reduced band; limited zero categories' }] },
-      { code: 'EE', name: 'Estonia', flag: '🇪🇪', standard: 24, reduced: [{ rate: 13, label: 'Reduced', desc: 'Hotels, cultural' }, { rate: 9, label: 'Reduced II', desc: 'Books, medicine' }, { rate: 5, label: 'Super-reduced', desc: 'Medical devices (narrow list)' }] },
-      { code: 'FI', name: 'Finland', flag: '🇫🇮', standard: 25.5, reduced: [{ rate: 14, label: 'Reduced', desc: 'Food, restaurant meals, animal feed' }, { rate: 10, label: 'Reduced II', desc: 'Books, medicine, culture, passenger transport' }] },
-      { code: 'FR', name: 'France', flag: '🇫🇷', standard: 20, reduced: [{ rate: 10, label: 'Reduced', desc: 'Transport, restaurants, housing renovation' }, { rate: 5.5, label: 'Reduced II', desc: 'Food, books, energy' }, { rate: 2.1, label: 'Super-reduced', desc: 'Pharmaceuticals, press (narrow list)' }] },
-      { code: 'DE', name: 'Germany', flag: '🇩🇪', standard: 19, reduced: [{ rate: 7, label: 'Reduced', desc: 'Food, books, hotels, local transport' }] },
-      { code: 'GR', name: 'Greece', flag: '🇬🇷', standard: 24, reduced: [{ rate: 13, label: 'Reduced', desc: 'Food, energy, hotels' }, { rate: 6, label: 'Super-reduced', desc: 'Books, theatre, medicine (narrow list)' }], note: 'EU VAT ID prefix EL' },
-      { code: 'HU', name: 'Hungary', flag: '🇭🇺', standard: 27, reduced: [{ rate: 18, label: 'Reduced', desc: 'Dairy, bakery, hotels (examples)' }, { rate: 5, label: 'Super-reduced', desc: 'Bread, milk, books (examples)' }] },
-      { code: 'IE', name: 'Ireland', flag: '🇮🇪', standard: 23, reduced: [{ rate: 13.5, label: 'Reduced', desc: 'Fuel, electricity, building services' }, { rate: 9, label: 'Reduced II', desc: 'Newspapers, sport, hospitality' }, { rate: 4.8, label: 'Super-reduced', desc: 'Agricultural livestock (narrow list)' }] },
-      { code: 'IT', name: 'Italy', flag: '🇮🇹', standard: 22, reduced: [{ rate: 10, label: 'Reduced', desc: 'Hotels, medicine, restaurants' }, { rate: 5, label: 'Reduced II', desc: 'Social services, some food' }, { rate: 4, label: 'Super-reduced', desc: 'Staple food, books, medical equipment' }] },
-      { code: 'LV', name: 'Latvia', flag: '🇱🇻', standard: 21, reduced: [{ rate: 12, label: 'Reduced', desc: 'Heating, medicine' }, { rate: 5, label: 'Super-reduced', desc: 'Vegetables, berries (local produce rules)' }] },
-      { code: 'LT', name: 'Lithuania', flag: '🇱🇹', standard: 21, reduced: [{ rate: 9, label: 'Reduced', desc: 'Books, heating' }, { rate: 5, label: 'Reduced II', desc: 'Pharmaceuticals, medical' }, { rate: 0, label: 'Zero', desc: 'Intra-EU supplies, exports (narrow lists)' }] },
-      { code: 'LU', name: 'Luxembourg', flag: '🇱🇺', standard: 17, reduced: [{ rate: 14, label: 'Reduced', desc: 'Wine, adult clothing, advertising' }, { rate: 8, label: 'Reduced II', desc: 'Cleaning, repairs, hairdressing' }, { rate: 3, label: 'Super-reduced', desc: 'Food, books, pharma (narrow list)' }] },
-      { code: 'MT', name: 'Malta', flag: '🇲🇹', standard: 18, reduced: [{ rate: 12, label: 'Reduced', desc: 'Medical equipment, pleasure boats' }, { rate: 7, label: 'Reduced II', desc: 'Hotel accommodation' }, { rate: 5, label: 'Super-reduced', desc: 'Food, books, medicine' }] },
-      { code: 'NL', name: 'Netherlands', flag: '🇳🇱', standard: 21, reduced: [{ rate: 9, label: 'Reduced', desc: 'Food, books, medicine, hotels, transport' }] },
-      { code: 'PL', name: 'Poland', flag: '🇵🇱', standard: 23, reduced: [{ rate: 8, label: 'Reduced', desc: 'Hotels, restaurants, health' }, { rate: 5, label: 'Super-reduced', desc: 'Staple food, books' }, { rate: 0, label: 'Zero', desc: 'Exports, intra-EU goods (conditions)' }] },
-      { code: 'PT', name: 'Portugal', flag: '🇵🇹', standard: 23, reduced: [{ rate: 13, label: 'Reduced', desc: 'Wine, electricity, catering' }, { rate: 6, label: 'Super-reduced', desc: 'Staple food, books, medicine' }], note: 'Lower rates in Azores and Madeira' },
-      { code: 'RO', name: 'Romania', flag: '🇷🇴', standard: 21, reduced: [{ rate: 9, label: 'Reduced', desc: 'Food, medicine, water' }, { rate: 5, label: 'Super-reduced', desc: 'Books, social housing (conditions)' }] },
-      { code: 'SK', name: 'Slovakia', flag: '🇸🇰', standard: 23, reduced: [{ rate: 19, label: 'Reduced', desc: 'Selected foodstuffs' }, { rate: 5, label: 'Super-reduced', desc: 'Books, e-books' }, { rate: 0, label: 'Zero', desc: 'Exports, intra-EU (conditions)' }] },
-      { code: 'SI', name: 'Slovenia', flag: '🇸🇮', standard: 22, reduced: [{ rate: 9.5, label: 'Reduced', desc: 'Food, water, restaurants' }, { rate: 5, label: 'Super-reduced', desc: 'Books, medicine' }] },
-      { code: 'ES', name: 'Spain', flag: '🇪🇸', standard: 21, reduced: [{ rate: 10, label: 'Reduced', desc: 'Food, transport, hotels' }, { rate: 4, label: 'Super-reduced', desc: 'Bread, milk, books, medicine' }], note: 'Canary Islands: IGIC (not Spanish VAT)' },
-      { code: 'SE', name: 'Sweden', flag: '🇸🇪', standard: 25, reduced: [{ rate: 12, label: 'Reduced', desc: 'Food, hotels' }, { rate: 6, label: 'Super-reduced', desc: 'Books, culture, passenger transport' }] },
-      { code: 'GB', name: 'United Kingdom', flag: '🇬🇧', standard: 20, reduced: [{ rate: 5, label: 'Reduced', desc: 'Energy saving materials, mobility aids' }, { rate: 0, label: 'Zero-rated', desc: 'Most food, books, children\'s clothes' }], note: 'Post-Brexit - not in EU VAT area' },
-      { code: 'NO', name: 'Norway', flag: '🇳🇴', standard: 25, reduced: [{ rate: 15, label: 'Reduced', desc: 'Food' }, { rate: 12, label: 'Reduced II', desc: 'Transport, hotels, cinema' }, { rate: 6, label: 'Super-reduced', desc: 'Books, e-books, newspapers' }], note: 'EEA - not EU member' },
-      { code: 'CH', name: 'Switzerland', flag: '🇨🇭', standard: 8.1, reduced: [{ rate: 3.8, label: 'Special', desc: 'Hotel lodging' }, { rate: 2.6, label: 'Reduced', desc: 'Food, books, medicine' }], note: 'Not EU - Swiss VAT' },
-      { code: 'IS', name: 'Iceland', flag: '🇮🇸', standard: 24, reduced: [{ rate: 11, label: 'Reduced', desc: 'Food, books, hotels, newspapers' }], note: 'EEA - not EU member' },
-      { code: 'LI', name: 'Liechtenstein', flag: '🇱🇮', standard: 8.1, reduced: [{ rate: 3.8, label: 'Special', desc: 'Hotel lodging' }, { rate: 2.6, label: 'Reduced', desc: 'Aligned with Switzerland' }], note: 'Swiss customs union' },
-      { code: 'MC', name: 'Monaco', flag: '🇲🇨', standard: 20, reduced: [{ rate: 10, label: 'Reduced', desc: 'Same bands as France' }, { rate: 5.5, label: 'Reduced II', desc: 'Food, books (examples)' }, { rate: 2.1, label: 'Super-reduced', desc: 'Pharma, press (examples)' }], note: 'Uses French VAT rules' },
-      { code: 'AD', name: 'Andorra', flag: '🇦🇩', standard: 4.5, reduced: [{ rate: 2.5, label: 'Reduced', desc: 'Tourism, culture' }, { rate: 1, label: 'Super-reduced', desc: 'Education, healthcare' }], note: 'IGI - not EU' },
-      { code: 'SM', name: 'San Marino', flag: '🇸🇲', standard: 17, reduced: [{ rate: 5, label: 'Reduced', desc: 'Aligned with Italy (conditions)' }], note: 'Custom agreement with Italy' },
-      { code: 'TR', name: 'Turkey', flag: '🇹🇷', standard: 20, reduced: [{ rate: 10, label: 'Reduced', desc: 'Food, textiles, medicine (examples)' }, { rate: 1, label: 'Super-reduced', desc: 'Basic staples (narrow list)' }], note: 'KDV - not EU' },
-      { code: 'UA', name: 'Ukraine', flag: '🇺🇦', standard: 20, reduced: [{ rate: 14, label: 'Reduced', desc: 'Agricultural supply chain' }, { rate: 7, label: 'Reduced II', desc: 'Medicine, books' }], note: 'Not EU' },
-      { code: 'RS', name: 'Serbia', flag: '🇷🇸', standard: 20, reduced: [{ rate: 10, label: 'Reduced', desc: 'Food, medicine, books, utilities' }], note: 'Not EU' },
-      { code: 'AL', name: 'Albania', flag: '🇦🇱', standard: 20, reduced: [{ rate: 6, label: 'Reduced', desc: 'Accommodation and tourism services' }], note: 'Not EU' },
-      { code: 'BA', name: 'Bosnia and Herzegovina', flag: '🇧🇦', standard: 17, reduced: [{ rate: 0, label: 'Zero', desc: 'Exports and narrow exempt categories (no general reduced rate)' }], note: 'Not EU' },
-      { code: 'MK', name: 'North Macedonia', flag: '🇲🇰', standard: 18, reduced: [{ rate: 10, label: 'Reduced', desc: 'Hotels, restaurants' }, { rate: 5, label: 'Super-reduced', desc: 'Food, medicine, books' }], note: 'EU candidate' },
-      { code: 'ME', name: 'Montenegro', flag: '🇲🇪', standard: 21, reduced: [{ rate: 7, label: 'Reduced', desc: 'Tourism, staples, books' }, { rate: 0, label: 'Zero', desc: 'Exports (conditions)' }], note: 'Not EU' },
-      { code: 'MD', name: 'Moldova', flag: '🇲🇩', standard: 20, reduced: [{ rate: 12, label: 'Reduced', desc: 'Hotels, restaurants' }, { rate: 8, label: 'Super-reduced', desc: 'Bread, milk, medicine' }], note: 'Not EU' },
-      { code: 'BY', name: 'Belarus', flag: '🇧🇾', standard: 20, reduced: [{ rate: 10, label: 'Reduced', desc: 'Food, medicine, children\'s goods' }, { rate: 0, label: 'Zero', desc: 'Exports (conditions)' }], note: 'Not EU' },
-      { code: 'GE', name: 'Georgia', flag: '🇬🇪', standard: 18, reduced: [{ rate: 0, label: 'Zero', desc: 'Exports, narrow list' }], note: 'Not EU' },
-      { code: 'RU', name: 'Russia', flag: '🇷🇺', standard: 20, reduced: [{ rate: 10, label: 'Reduced', desc: 'Food, children\'s goods, books, medicine' }, { rate: 0, label: 'Zero', desc: 'Exports (conditions)' }], note: 'Not EU' }
+      { code: 'BE', name: 'Belgium', flag: '🇧🇪', standard: 21, reduced: [{ rate: 12, label: 'Reduced', desc: 'Restaurants, energy renovation' }, { rate: 6, label: 'Reduced II', desc: 'Food, medicine, books' }, { rate: 0, label: 'Zero', desc: 'Certain newspapers' }] },
+      { code: 'BG', name: 'Bulgaria', flag: '🇧🇬', standard: 20, reduced: [{ rate: 9, label: 'Reduced', desc: 'Accommodation, books, catering' }] },
+      { code: 'CY', name: 'Cyprus', flag: '🇨🇾', standard: 19, reduced: [{ rate: 9, label: 'Reduced', desc: 'Catering, domestic passenger transport' }, { rate: 5, label: 'Reduced II', desc: 'Food, LPG, books, theater' }] },
+      { code: 'CZ', name: 'Czech Republic', flag: '🇨🇿', standard: 21, reduced: [{ rate: 12, label: 'Reduced', desc: 'Food, medicine, books, accommodation' }] },
+      { code: 'DE', name: 'Germany', flag: '🇩🇪', standard: 19, reduced: [{ rate: 7, label: 'Reduced', desc: 'Food, books, cultural events, public transport' }] },
+      { code: 'DK', name: 'Denmark', flag: '🇩🇰', standard: 25, reduced: [] },
+      { code: 'EE', name: 'Estonia', flag: '🇪🇪', standard: 22, reduced: [{ rate: 9, label: 'Reduced', desc: 'Books, medicine, accommodation' }] },
+      { code: 'EL', name: 'Greece', flag: '🇬🇷', standard: 24, reduced: [{ rate: 13, label: 'Reduced', desc: 'Food, passenger transport, electricity' }, { rate: 6, label: 'Reduced II', desc: 'Medicine, books, theater' }] },
+      { code: 'ES', name: 'Spain', flag: '🇪🇸', standard: 21, reduced: [{ rate: 10, label: 'Reduced', desc: 'Food, passenger transport, water' }, { rate: 4, label: 'Super Reduced', desc: 'Basic food, books, medicine' }] },
+      { code: 'FI', name: 'Finland', flag: '🇫🇮', standard: 25.5, reduced: [{ rate: 14, label: 'Reduced', desc: 'Food, catering, animal feed' }, { rate: 10, label: 'Reduced II', desc: 'Books, medicine, passenger transport' }] },
+      { code: 'FR', name: 'France', flag: '🇫🇷', standard: 20, reduced: [{ rate: 10, label: 'Reduced', desc: 'Catering, passenger transport' }, { rate: 5.5, label: 'Reduced II', desc: 'Food, books, energy' }, { rate: 2.1, label: 'Super Reduced', desc: 'Reimbursable medicine' }] },
+      { code: 'HR', name: 'Croatia', flag: '🇭🇷', standard: 25, reduced: [{ rate: 13, label: 'Reduced', desc: 'Accommodation, newspapers, electricity' }, { rate: 5, label: 'Reduced II', desc: 'Bread, milk, books, medicine' }] },
+      { code: 'HU', name: 'Hungary', flag: '🇭🇺', standard: 27, reduced: [{ rate: 18, label: 'Reduced', desc: 'Dairy, bakery goods' }, { rate: 5, label: 'Reduced II', desc: 'Medicine, books, internet access' }] },
+      { code: 'IE', name: 'Ireland', flag: '🇮🇪', standard: 23, reduced: [{ rate: 13.5, label: 'Reduced', desc: 'Fuel, building, services' }, { rate: 9, label: 'Reduced II', desc: 'Books, newspapers, magazines' }, { rate: 0, label: 'Zero', desc: 'Basic food, children clothes' }] },
+      { code: 'IT', name: 'Italy', flag: '🇮🇹', standard: 22, reduced: [{ rate: 10, label: 'Reduced', desc: 'Water, passenger transport, hotels' }, { rate: 5, label: 'Reduced II', desc: 'Certain food, passenger transport' }, { rate: 4, label: 'Super Reduced', desc: 'Basic food, books, newspapers' }] },
+      { code: 'LT', name: 'Lithuania', flag: '🇱🇹', standard: 21, reduced: [{ rate: 9, label: 'Reduced', desc: 'Heating, books, passenger transport' }, { rate: 5, label: 'Reduced II', desc: 'Medicine, disabled equipment' }] },
+      { code: 'LU', name: 'Luxembourg', flag: '🇱🇺', standard: 17, reduced: [{ rate: 14, label: 'Reduced', desc: 'Fuel oil, advertising' }, { rate: 8, label: 'Reduced II', desc: 'Gas, electricity' }, { rate: 3, label: 'Super Reduced', desc: 'Food, books, medicine' }] },
+      { code: 'LV', name: 'Latvia', flag: '🇱🇻', standard: 21, reduced: [{ rate: 12, label: 'Reduced', desc: 'Medicine, books, accommodation' }, { rate: 5, label: 'Reduced II', desc: 'Typical Latvian fruits/vegetables' }] },
+      { code: 'MT', name: 'Malta', flag: '🇲🇹', standard: 18, reduced: [{ rate: 7, label: 'Reduced', desc: 'Accommodation' }, { rate: 5, label: 'Reduced II', desc: 'Confectionery, medical accessories, books' }] },
+      { code: 'NL', name: 'Netherlands', flag: '🇳🇱', standard: 21, reduced: [{ rate: 9, label: 'Reduced', desc: 'Food, water, books, medicine, hotels' }] },
+      { code: 'PL', name: 'Poland', flag: '🇵🇱', standard: 23, reduced: [{ rate: 8, label: 'Reduced', desc: 'Passenger transport, medicine, hotels' }, { rate: 5, label: 'Reduced II', desc: 'Basic food, books, periodicals' }] },
+      { code: 'PT', name: 'Portugal', flag: '🇵🇹', standard: 23, reduced: [{ rate: 13, label: 'Reduced', desc: 'Wine, certain agricultural goods' }, { rate: 6, label: 'Reduced II', desc: 'Basic food, books, medicine, hotels' }] },
+      { code: 'RO', name: 'Romania', flag: '🇷🇴', standard: 19, reduced: [{ rate: 9, label: 'Reduced', desc: 'Food, medicine, water supply' }, { rate: 5, label: 'Reduced II', desc: 'Books, school books, cultural events' }] },
+      { code: 'SE', name: 'Sweden', flag: '🇸🇪', standard: 25, reduced: [{ rate: 12, label: 'Reduced', desc: 'Food, hotels, restaurants' }, { rate: 6, label: 'Reduced II', desc: 'Books, newspapers, cultural events' }] },
+      { code: 'SI', name: 'Slovenia', flag: '🇸🇮', standard: 22, reduced: [{ rate: 9.5, label: 'Reduced', desc: 'Food, water, medicine, passenger transport' }, { rate: 5, label: 'Reduced II', desc: 'Books, newspapers' }] },
+      { code: 'SK', name: 'Slovakia', flag: '🇸🇰', standard: 20, reduced: [{ rate: 10, label: 'Reduced', desc: 'Food, medicine, books, accommodation' }] }
     ];
 
-    const select = document.getElementById('country-select');
-    const results = document.getElementById('results');
-    const placeholder = document.getElementById('placeholder');
+    // 初始化下拉菜单
+    const selectEl = document.getElementById('country-select');
+    const placeholderEl = document.getElementById('placeholder');
+    const resultsEl = document.getElementById('results');
     const flagEl = document.getElementById('flag');
-    const nameEl = document.getElementById('country-name');
-    const codeEl = document.getElementById('country-code');
-    const gridEl = document.getElementById('rates-grid');
+    const countryNameEl = document.getElementById('country-name');
+    const countryCodeEl = document.getElementById('country-code');
+    const ratesGridEl = document.getElementById('rates-grid');
 
-    VAT_DATA.sort((a, b) => a.name.localeCompare(b.name)).forEach(country => {
+    VAT_DATA.forEach(c => {
       const opt = document.createElement('option');
-      opt.value = country.code;
-      opt.textContent = country.name;
-      select.appendChild(opt);
+      opt.value = c.code;
+      opt.textContent = `${c.flag} ${c.name}`;
+      selectEl.appendChild(opt);
     });
 
-    function formatRate(rate) {
-      if (typeof rate === 'number' && rate % 1 !== 0) {
-        return (Math.round(rate * 100) / 100) + '%';
-      }
-      return `${rate}%`;
-    }
-
-    function renderRates(country) {
-      flagEl.textContent = country.flag;
-      nameEl.textContent = country.name;
-      codeEl.textContent = country.note
-        ? `${country.code} - ${country.note}`
-        : `Country code: ${country.code}`;
-
-      gridEl.innerHTML = '';
-
-      const standardRow = document.createElement('div');
-      standardRow.className = 'rate-row standard';
-      standardRow.innerHTML = `
-        <div>
-          <div class="rate-label">Standard VAT Rate</div>
-          <div class="rate-desc">Default rate for most goods &amp; services</div>
-        </div>
-        <div class="rate-value">${formatRate(country.standard)}</div>
-      `;
-      gridEl.appendChild(standardRow);
-
-      country.reduced.forEach(r => {
-        const row = document.createElement('div');
-        row.className = 'rate-row';
-        row.innerHTML = `
-          <div>
-            <div class="rate-label">${r.label} (${formatRate(r.rate)})</div>
-            <div class="rate-desc">${r.desc}</div>
-          </div>
-          <div class="rate-value">${formatRate(r.rate)}</div>
-        `;
-        gridEl.appendChild(row);
-      });
-    }
-
-    select.addEventListener('change', () => {
-      const code = select.value;
+    selectEl.addEventListener('change', (e) => {
+      const code = e.target.value;
       if (!code) {
-        results.classList.remove('visible');
-        placeholder.style.display = 'block';
+        placeholderEl.style.display = 'block';
+        resultsEl.classList.remove('visible');
         return;
       }
 
       const country = VAT_DATA.find(c => c.code === code);
       if (country) {
-        renderRates(country);
-        placeholder.style.display = 'none';
-        results.classList.add('visible');
+        flagEl.textContent = country.flag;
+        countryNameEl.textContent = country.name;
+        countryCodeEl.textContent = `EU VAT Country Code: ${country.code}`;
+        
+        let html = `
+          <div class="rate-row standard">
+            <div>
+              <div class="rate-label">Standard VAT Rate</div>
+              <div class="rate-desc">Applies to most standard commercial goods</div>
+            </div>
+            <div class="rate-value">${country.standard}%</div>
+          </div>
+        `;
+
+        country.reduced.forEach(r => {
+          html += `
+            <div class="rate-row">
+              <div>
+                <div class="rate-label">${r.label} Rate</div>
+                <div class="rate-desc">${r.desc}</div>
+              </div>
+              <div class="rate-value">${r.rate}%</div>
+            </div>
+          `;
+        });
+
+        ratesGridEl.innerHTML = html;
+        placeholderEl.style.display = 'none';
+        resultsEl.classList.add('visible');
       }
     });
+
+    // 交互逻辑函数
+    function diagnoseCompliance() {
+      const isShopify = document.getElementById('chk-shopify').checked;
+      const hasWarehouse = document.getElementById('chk-warehouse').checked;
+      const isOver10k = document.getElementById('chk-over10k').checked;
+      const resultDiv = document.getElementById('diag-result');
+      resultDiv.style.display = 'block';
+
+      if (hasWarehouse) {
+        resultDiv.style.background = '#fef2f2'; resultDiv.style.border = '1px solid #fecaca'; resultDiv.style.color = '#dc2626';
+        resultDiv.innerHTML = '<strong>🚨 必须立即注册本地 VAT 税号！</strong><br>只要货物在欧洲本地仓储并发出，无视销售额大小，必须在存储国注册 VAT 并申报。';
+      } else if (isShopify && isOver10k) {
+        resultDiv.style.background = '#fffbeb'; resultDiv.style.border = '1px solid #fef3c7'; resultDiv.style.color = '#d97706';
+        resultDiv.innerHTML = '<strong>⚠️ 必须注册并启动 OSS 申报系统！</strong><br>独立站卖家全欧年销破万欧，必须在任意一个欧盟国家注册 OSS 系统进行统一申报。';
+      } else if (isShopify && !isOver10k) {
+        resultDiv.style.background = '#ecfdf5'; resultDiv.style.border = '1px solid #a7f3d0'; resultDiv.style.color = '#059669';
+        resultDiv.innerHTML = '<strong>✅ 暂时安全，适用出发国规则</strong><br>独立站年营业额未达1万欧，可以暂时按照常规方式直邮，建议随业务增长提前布局。';
+      } else {
+        resultDiv.style.background = '#eff6ff'; resultDiv.style.border = '1px solid #bfdbfe'; resultDiv.style.color = '#2563eb';
+        resultDiv.innerHTML = '<strong>ℹ️ 标准平台代扣代缴模式</strong><br>主流电商平台发货且无本地仓，平台会自动扣税。重点关注账单，防止利润被平台误扣。';
+      }
+    }
+
+    function calculateCustoms() {
+      const amount = parseFloat(document.getElementById('order-amount').value) || 0;
+      const currency = document.querySelector('input[name="currency"]:checked').value;
+      const resultDiv = document.getElementById('calc-result');
+      resultDiv.style.display = 'block';
+
+      if (currency === 'EUR') {
+        if (amount <= 150) {
+          resultDiv.style.background = '#ecfdf5'; resultDiv.style.border = '1px solid #a7f3d0'; resultDiv.style.color = '#059669';
+          resultDiv.innerHTML = `<strong>🟢 路径：IOSS 极速清关通道 (${amount} EUR)</strong><br>适用 IOSS 规则。包裹在海关享绿色通道。请确保包裹上贴有合规的 IOSS 识别号。`;
+        } else {
+          resultDiv.style.background = '#fef2f2'; resultDiv.style.border = '1px solid #fecaca'; resultDiv.style.color = '#dc2626';
+          resultDiv.innerHTML = `<strong>🔴 路径：标准大额包裹清关 (${amount} EUR)</strong><br><strong>超出 IOSS 范畴！</strong> 海关边境会扣关并征收进口 VAT 和关税。必须使用 DDP 物流。`;
+        }
+      } else {
+        if (amount <= 135) {
+          resultDiv.style.background = '#ecfdf5'; resultDiv.style.border = '1px solid #a7f3d0'; resultDiv.style.color = '#059669';
+          resultDiv.innerHTML = `<strong>🟢 路径：英国小额包裹代扣代缴 (${amount} GBP)</strong><br>低于 135 英镑起征点。海关免征进口 VAT。平台销售会自动代扣。`;
+        } else {
+          resultDiv.style.background = '#fef2f2'; resultDiv.style.border = '1px solid #fecaca'; resultDiv.style.color = '#dc2626';
+          resultDiv.innerHTML = `<strong>🔴 路径：标准商业进口清关 (${amount} GBP)</strong><br><strong>高于 135 英镑！</strong> 英国海关在边境直接征收进口 VAT 和关税。建议申请 PVA。`;
+        }
+      }
+    }
   </script>
 </body>
 </html>
